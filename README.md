@@ -1,6 +1,4 @@
-Chicken-Java
+101-Lang Java Executor
 ============
 
-Chicken Language Java Implementation
-
-Atm nothing is acctually working. Do not use this software!
+This is the program that can execute compiled 101-lang scripts. 
