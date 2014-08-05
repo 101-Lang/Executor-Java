@@ -1,4 +1,4 @@
-package oneOone.lang.compiler;
+package oneOone.lang;
 
 import oneOone.lang.common.Common;
 import oneOone.lang.common.ICommand;
