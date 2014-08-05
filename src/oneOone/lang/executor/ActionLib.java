@@ -1,5 +1,7 @@
 package oneOone.lang.executor;
 
+import java.util.Scanner;
+
 public class ActionLib {
 	
 	public static Action mathAdd = new Action() {
@@ -135,6 +137,28 @@ public class ActionLib {
 		@Override
 		public void run(Executer exe) {
 			exe.removeLastStackNumber();
+		}
+	};
+	
+	public static Action inChar = new Action() {
+		
+		@Override
+		public void run(Executer exe) {
+			Scanner scanner = new Scanner(System.in);
+			String txt = scanner.nextLine();
+			exe.stack.add(Character.getNumericValue(txt.charAt(0)));
+			scanner.close();
+		}
+	};
+	
+	public static Action inInt = new Action() {
+		
+		@Override
+		public void run(Executer exe) {
+			Scanner scanner = new Scanner(System.in);
+			String txt = scanner.nextLine();
+			exe.stack.add(Integer.parseInt(txt));
+			scanner.close();
 		}
 	};
 	
