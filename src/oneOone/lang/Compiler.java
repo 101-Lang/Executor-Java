@@ -3,6 +3,8 @@ package oneOone.lang;
 import oneOone.lang.common.Common;
 import oneOone.lang.common.ICommand;
 import oneOone.lang.common.ICompiler;
+import oneOone.lang.common.commands.LoopStartCommand;
+import oneOone.lang.common.exception.CompileException;
 
 public class Compiler extends ICompiler{
 	
@@ -11,36 +13,48 @@ public class Compiler extends ICompiler{
 	}
 	
 	@Override
-	public String compile(String input){
-		input = input.replaceAll("\n", "").replaceAll("\r", "").replaceAll("\\s+", " ");
-		String[] lines = input.split(";");
+	public String compile(String input) throws CompileException{
+		LoopStartCommand.startedLoopReturnNumbers.clear();
+		
+		input = input.replaceAll(" +", " ");
+		String[] lines = input.split("\\r?\\n");
 		String output = "";
-		int lineNr = 1;
+		currentUncompiledCommand = 1;
 		for(String line : lines){
-			try{
-				output += compileCommand(line) + " ";
-			}catch(Exception e){
-				System.err.println("Error at command " + lineNr);
-				e.printStackTrace();
-				System.exit(1);
+			String[] commands = line.split(";");
+			for(String command : commands){
+				try{
+					command = command.trim();
+					output += compileCommand(command) + " ";
+				}catch(Exception e){
+					throw new CompileException(currentUncompiledCommand, e.getMessage());
+				}	
 			}
-			lineNr++;
+			
+			currentUncompiledCommand++;
 		}
 		return output;
 	}
 	
 	@Override
-	public String compileCommand(String code) {
+	public String compileCommand(String code){
 		for(ICommand command : Common.commands){
-			if(code.toLowerCase().startsWith(command.getDecompiledPrefix().toLowerCase()))
-				return command.compile(this, code);
+			if(code.toLowerCase().startsWith(command.getDecompiledPrefix().toLowerCase())){
+				String out = command.compile(this, code);
+				currentCompiledLine ++;
+				return out;
+			}
 		}
-		throw new IllegalArgumentException("No such function in 101-script: " + code);
+		throw new IllegalArgumentException("No such function in 101-script: '" + code + "'");
 	}
 
 	public static void main(String[] args) {
 		if(args.length == 0)
 			throw new IllegalArgumentException("The first argument must be the input.");
-		System.out.println(new Compiler().compile(args[0]));
+		try {
+			System.out.println(new Compiler().compile(args[0]));
+		} catch (CompileException e) {
+			e.printStackTrace();
+		}
 	}
 }

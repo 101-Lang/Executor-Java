@@ -18,7 +18,7 @@ public class JumpCommand extends ICommand{
 		int condition = exe.getSecondLastStackNumber();
 		
 		if (condition == 1)
-			exe.lineNumber = addres - 1;
+			exe.lineNumber = addres - 2;
 		exe.removeLastStackNumber();
 		exe.removeLastStackNumber();
 	}

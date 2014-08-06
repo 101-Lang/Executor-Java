@@ -2,6 +2,7 @@ package oneOone.lang.test;
 
 import oneOone.lang.Compiler;
 import oneOone.lang.Executer;
+import oneOone.lang.common.exception.CompileException;
 
 public class LoopTest {
 	
@@ -18,11 +19,21 @@ public class LoopTest {
 	public static void main(String[] args) {
 		
 		Compiler c = new Compiler();
-		String compiled = c.compile(code);
-		System.out.println(compiled);
+		String compiled;
+		try {
+			
+			compiled = c.compile(code);
+			System.out.println(compiled);
+			Executer e = new Executer();
+			e.Execute(compiled, true);
+			
+		} catch (CompileException e1) {
+			System.err.println("line number: " + e1.getLineNumber());
+			e1.printStackTrace();
+		}
 		
-		Executer e = new Executer();
-		e.Execute(compiled);
+		
+		
 	}
 	
 }

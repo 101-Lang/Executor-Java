@@ -14,7 +14,7 @@ public class OutIntCommand extends ICommand{
 
 	@Override
 	public void execute(IExecutor exe) {
-		System.out.println("Out: " + exe.getLastStackNumber());
+		exe.println("Out: " + exe.getLastStackNumber());
 		exe.removeLastStackNumber();
 	}
 

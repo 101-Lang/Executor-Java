@@ -31,6 +31,10 @@ public final class Common {
 		commands.add(new RemoveCommand());
 		commands.add(new SmallerThanCommand());
 		commands.add(new SubtractCommand());
+		
+		commands.add(new LoopStartCommand());
+		commands.add(new LoopEndCommand());
+		commands.add(new PrintCommand());
 				
 	}
 	
