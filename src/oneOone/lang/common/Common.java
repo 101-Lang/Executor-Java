@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import oneOone.lang.common.commands.*;
 
-public class Common {
+public final class Common {
 	
 	public static ArrayList<ICommand> commands;
 	

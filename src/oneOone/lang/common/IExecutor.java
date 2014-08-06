@@ -11,6 +11,8 @@ public abstract class IExecutor {
 	
 	public List<Integer> stack = new ArrayList<>();
 	
+	public abstract void Execute(String input);
+	
 	public abstract void handleCommand(String in);
 	
 	public int getLastStackNumber() {

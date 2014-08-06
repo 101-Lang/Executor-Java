@@ -11,9 +11,13 @@ public class Executer extends IExecutor {
 	public static final String SPACE = " ";
 	public static final String PATTERN = "[01]+";
 	
-	public Executer(String in) {
-		
-		String[] cmds = in.split(SPACE);
+	public Executer() {
+		Common.init();
+	}
+	
+	@Override
+	public void Execute(String input) {
+		String[] cmds = input.split(SPACE);
 		if (cmds.length == 0)
 			return;
 		maxLineNumber = cmds.length - 1;
@@ -25,6 +29,7 @@ public class Executer extends IExecutor {
 		}
 	}
 	
+	@Override
 	public void handleCommand(String in) {
 		if (!in.matches(PATTERN))
 			throw new IllegalArgumentException("Input must be of pattern " + PATTERN);
@@ -38,8 +43,9 @@ public class Executer extends IExecutor {
 	public static void main(String[] args) {
 		if (args.length == 0)
 			throw new IllegalArgumentException("The first argument must be the input.");
-		Common.init();
-		new Executer(args[0]);
+		new Executer().Execute(args[0]);;
 	}
+
+	
 	
 }

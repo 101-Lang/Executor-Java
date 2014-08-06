@@ -6,14 +6,19 @@ import oneOone.lang.common.ICompiler;
 
 public class Compiler extends ICompiler{
 	
-	public Compiler(String input){
+	public Compiler(){
+		Common.init();
+	}
+	
+	@Override
+	public String compile(String input){
 		input = input.replaceAll("\n", "").replaceAll("\r", "").replaceAll("\\s+", " ");
 		String[] lines = input.split(";");
 		String output = "";
 		int lineNr = 1;
 		for(String line : lines){
 			try{
-				output += compile(line) + " ";
+				output += compileCommand(line) + " ";
 			}catch(Exception e){
 				System.err.println("Error at command " + lineNr);
 				e.printStackTrace();
@@ -21,11 +26,11 @@ public class Compiler extends ICompiler{
 			}
 			lineNr++;
 		}
-		System.out.println(output);
+		return output;
 	}
 	
 	@Override
-	public String compile(String code) {
+	public String compileCommand(String code) {
 		for(ICommand command : Common.commands){
 			if(code.toLowerCase().startsWith(command.getDecompiledPrefix().toLowerCase()))
 				return command.compile(this, code);
@@ -36,7 +41,6 @@ public class Compiler extends ICompiler{
 	public static void main(String[] args) {
 		if(args.length == 0)
 			throw new IllegalArgumentException("The first argument must be the input.");
-		Common.init();
-		new Compiler(args[0]);
+		System.out.println(new Compiler().compile(args[0]));
 	}
 }
