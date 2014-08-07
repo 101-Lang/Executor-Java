@@ -1,7 +1,9 @@
 package oneOone.lang.common;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public abstract class IExecutor {
 	
@@ -11,7 +13,7 @@ public abstract class IExecutor {
 	
 	public List<Integer> stack = new ArrayList<>();
 	
-	public abstract String Execute(String input, boolean showStack);
+	public abstract String Execute(String input, boolean showStack, InputStream inputStream);
 	
 	public abstract void handleCommand(String in);
 	
@@ -28,4 +30,6 @@ public abstract class IExecutor {
 	}
 
 	public abstract void println(String string);
+	
+	public abstract Scanner getInputScanner();
 }

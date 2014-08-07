@@ -38,5 +38,12 @@ public class EqualsCommand extends ICommand {
 	public String getDecompiledPrefix() {
 		return "Compare.equals";
 	}
-	
+
+	@Override
+	public String getDescription() {
+		return "Compares the last value on the stack to the second last value on the stack. "
+				+ "It works like the '==' character in Java. "
+				+ "If the last value is the same as the second last, it will add 1 to the stack, "
+				+ "else it will add 0 to the stack.";
+	}
 }

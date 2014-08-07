@@ -17,13 +17,15 @@ public class PushCommand extends ICommand {
 		exe.stack.add(Integer.parseInt(exe.currentCommand.substring(1), 2));
 	}
 	
+	//we get something in decimal, and want it in binary.
 	@Override
-	public String compile(ICompiler compiler, String code) {  //we get something in decimal, and want it in binary.
+	public String compile(ICompiler compiler, String code) {  
 		return "0" + Integer.toString(Integer.parseInt(code.substring(5)), 2);
 	}
 	
+	 //we get binary ant want decimal.
 	@Override
-	public String decompile(IDecompiler decompiler, String binary) {  //we get binary ant want decimal.
+	public String decompile(IDecompiler decompiler, String binary) { 
 		return getDecompiledPrefix() + " " + Integer.parseInt(binary.substring(1), 2);
 	}
 	
@@ -35,6 +37,13 @@ public class PushCommand extends ICommand {
 	@Override
 	public String getDecompiledPrefix() {
 		return "push";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Pushes a value to the end of the stack. For the compiled version: The command starts with 0 and is followed by a binarry number that is the value to add. "
+				+ "For exaple if you have code 0101, the first 0 tells it is an add command, an the number 101 is the value to add. So 0101 adds 5 to the stack."
+				+ "If you are working in words, the command has 1 argument with the value. This could like like 'push 5'. This will be compiled to 0101";
 	}
 	
 }

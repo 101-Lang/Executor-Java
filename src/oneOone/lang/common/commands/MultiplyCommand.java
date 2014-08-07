@@ -41,4 +41,10 @@ public class MultiplyCommand extends ICommand{
 		return "Math." + getName();
 	}
 	
+	@Override
+	public String getDescription() {
+		return "This command adds the mulitplys top values of the stack and adds the result to the stack. The two multiplyed values are removed."
+				+ "For example: if you have stack that looks like [1,2,3], and you do an mulitply command, it will look like [1,6]";
+	}
+	
 }

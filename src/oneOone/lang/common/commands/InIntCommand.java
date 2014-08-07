@@ -1,7 +1,5 @@
 package oneOone.lang.common.commands;
 
-import java.util.Scanner;
-
 import oneOone.lang.common.ICommand;
 import oneOone.lang.common.ICompiler;
 import oneOone.lang.common.IDecompiler;
@@ -16,10 +14,13 @@ public class InIntCommand  extends ICommand{
 
 	@Override
 	public void execute(IExecutor exe) {
-		Scanner scanner = new Scanner(System.in);
-		String txt = scanner.nextLine();
-		exe.stack.add(Integer.parseInt(txt));
-		scanner.close();
+		try{
+			exe.stack.add(Integer.parseInt(exe.getInputScanner().nextLine()));
+		}catch(Exception e){
+			exe.stack.add(-1);
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override
@@ -40,6 +41,14 @@ public class InIntCommand  extends ICommand{
 	@Override
 	public String getDecompiledPrefix() {
 		return "In.int";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Get input at runtime from the user. "
+				+ "This one gets a Integer from the user. "
+				+ "The read integer is added to the stack at the end."
+				+ "If something goes wrong (reading/converting/adding) than the value -1 will be added to the stack.";
 	}
 	
 }

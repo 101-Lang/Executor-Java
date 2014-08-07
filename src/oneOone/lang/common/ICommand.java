@@ -20,4 +20,5 @@ public abstract class ICommand {
 	
 	public abstract String getDecompiledPrefix();
 	
+	public abstract String getDescription();
 }

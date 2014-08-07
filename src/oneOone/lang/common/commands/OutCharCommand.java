@@ -37,5 +37,13 @@ public class OutCharCommand extends ICommand{
 	public String getDecompiledPrefix() {
 		return "Out.char";
 	}
+
+	@Override
+	public String getDescription() {
+		return "Outputs the last value on the stack as a Character. "
+				+ "For example, if the stack looks like [99], "
+				+ "and the out.char command is executed, "
+				+ "the output would be 'c' and the stack would be [] (empty)";
+	}
 	
 }

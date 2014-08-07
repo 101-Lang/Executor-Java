@@ -9,7 +9,7 @@ import oneOone.lang.common.IExecutor;
 
 public class LoopStartCommand extends ICommand {
 	
-	public static ArrayList<Integer> startedLoopReturnNumbers = new ArrayList<>();
+	public static final ArrayList<Integer> startedLoopReturnNumbers = new ArrayList<>();
 	
 	@Override
 	public String getName() {
@@ -48,6 +48,15 @@ public class LoopStartCommand extends ICommand {
 	@Override
 	public String getDecompiledPrefix() {
 		return "loop.start";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Starts a loop. "
+				+ "The number behind the loop.start tells how much the code betwee loop.start and loop.end should be executed."
+				+ "If that number is missing, than an error will be thrown."
+				+ "This function is not a generic 101 function. It only makes coding simpler. "
+				+ "If you want to see how this is compiled, look at the source code. ";
 	}
 	
 }

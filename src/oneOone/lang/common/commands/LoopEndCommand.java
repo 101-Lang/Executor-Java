@@ -46,4 +46,12 @@ public class LoopEndCommand extends ICommand {
 		return "loop.end";
 	}
 	
+	@Override
+	public String getDescription() {
+		return "End a loop. "
+				+ "If no loop is opend by loop.start than an erro will be thrown."
+				+ "This function is not a generic 101 function. It only makes coding simpler. "
+				+ "If you want to see how this is compiled, look at the source code. ";
+	}
+	
 }

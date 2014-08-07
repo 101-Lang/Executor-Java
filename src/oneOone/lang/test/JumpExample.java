@@ -4,19 +4,20 @@ import oneOone.lang.Compiler;
 import oneOone.lang.Executer;
 import oneOone.lang.common.exception.CompileException;
 
-public class LoopTest {
+public class JumpExample {
 	
 	private static String code = 
-			"pUsH 10;"
-			+ "push 1;"
-			+ "duplicate;"
-			+ "out.int;"
-			+ "push 1;"
-			+ "math.add;"
-			+ "compare.smaller;"
-			+ "push 2;"
-			+ "jump;";
+			  "PusH 5;"  //pushes 5 to the stack
+			+ "out.int;" //shows the 5 on the screen.
+			+ "push 1;"  //this is the condition: true
+			+ "push 1;"  //this is the addres. This jumps to the beginning of the program.
+			+ "jump;";   //jumps to 'push 5' command.
 	
+	/**
+	 * Runs a example program. This is never ending loop that will output forever '5'.
+	 * Look at the source to see the code.
+	 * @param args are ignored
+	 */
 	public static void main(String[] args) {
 		
 		Compiler c = new Compiler();

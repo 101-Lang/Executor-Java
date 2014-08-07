@@ -1,4 +1,4 @@
-package oneOone.lang.test;
+package oneOone.lang.test.ide;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -14,6 +15,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.SimpleAttributeSet;
@@ -22,17 +24,16 @@ import javax.swing.text.StyleConstants;
 import oneOone.lang.Compiler;
 import oneOone.lang.Decompiler;
 import oneOone.lang.Executer;
+import oneOone.lang.common.Common;
 import oneOone.lang.common.exception.CompileException;
 import oneOone.lang.common.exception.DecompileException;
-
-import javax.swing.border.TitledBorder;
-import javax.swing.JCheckBox;
 
 public class Gui extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
 	
 	public Gui thiss = this;
+	private AutoSuggestor autoSuggestor;
 	
 	private JTextPane codeArea;
 	private JTextArea compiledArea;
@@ -43,6 +44,8 @@ public class Gui extends JFrame {
 	
 	SimpleAttributeSet red = new SimpleAttributeSet();
 	SimpleAttributeSet black = new SimpleAttributeSet();
+	
+	
 	
 	public boolean isCompiled = true;
 	public long lastChange = 0;
@@ -67,6 +70,7 @@ public class Gui extends JFrame {
 	
 	
 	public Gui() {
+		Common.init();
 		setTitle("101-Script IDE");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		StyleConstants.setForeground(red, Color.RED);
@@ -92,6 +96,7 @@ public class Gui extends JFrame {
 		
 		codeArea = new JTextPane();
 		scrollPane.setViewportView(codeArea);
+		//autoSuggestor = new AutoSuggestor(codeArea, this);
 		
 		JSplitPane splitPane_1 = new JSplitPane();
 		splitPane_1.setOrientation(JSplitPane.VERTICAL_SPLIT);
@@ -102,14 +107,15 @@ public class Gui extends JFrame {
 		codeArea.getDocument().addDocumentListener(new DocumentListener() {
 			
 			public String getText() {
-				String text = "1  " + System.lineSeparator();
+				
+				StringBuffer text = new StringBuffer("1  " + System.lineSeparator());
 				int lines = codeArea.getText().split("\\r?\\n", -1).length;
 				for (int i = 2; i <= lines; i++) {
-					text += i + "  " + System.getProperty("line.separator");
+					text.append(i + "  " + System.getProperty("line.separator"));
 				}
 				lastChange = System.currentTimeMillis();
 				isCompiled = false;
-				return text;
+				return text.toString();
 			}
 			
 			@Override
@@ -181,7 +187,7 @@ public class Gui extends JFrame {
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Executer exe = new Executer();
-				consoleArea.setText(exe.Execute(compiledArea.getText(), chckbxShowStack.isSelected()));
+				consoleArea.setText(exe.Execute(compiledArea.getText(), chckbxShowStack.isSelected(), System.in));
 				
 			}
 		});
@@ -207,8 +213,9 @@ public class Gui extends JFrame {
 				JOptionPane.showMessageDialog(thiss, "An error happend at line " + e1.getLineNumber() + ". Message: " + e1.getMessage());
 		}
 		int cur = codeArea.getCaretPosition();
+
+//		autoSuggestor.listen = false;
 		codeArea.setText("");
-		
 		try{
 			String[] lines = in.split("\\r?\\n");
 			for(int i = 0; i < lines.length; i++){
@@ -222,7 +229,9 @@ public class Gui extends JFrame {
 		}catch(Exception e2){
 			e2.printStackTrace();
 		}
+//		autoSuggestor.listen = true;
 		codeArea.setCaretPosition(cur);
+		
 		return out;
 	}
 	

@@ -38,4 +38,11 @@ public class OutIntCommand extends ICommand{
 		return "Out.int";
 	}
 	
+	@Override
+	public String getDescription() {
+		return "Outputs the last value on the stack. "
+				+ "For example, if the stack looks like [99], "
+				+ "and the out.int command is executed, "
+				+ "the output would be '99' and the stack would be [] (empty)";
+	}
 }

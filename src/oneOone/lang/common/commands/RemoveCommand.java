@@ -37,4 +37,10 @@ public class RemoveCommand extends ICommand{
 		return getName();
 	}
 	
+	@Override
+	public String getDescription() {
+		return "Removes the last value on the stack."
+				+ "For example if the stack is [1,2,3] and you do a duplicate command, the stack will look like [1,2]";
+	}
+	
 }

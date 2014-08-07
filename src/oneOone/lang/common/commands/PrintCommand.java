@@ -21,7 +21,7 @@ public class PrintCommand extends ICommand{
 		String out = "";
 		String toPrint;
 		try{
-			toPrint = code.split(" ")[1];
+			toPrint = code.split(" ", 2)[1];
 		} catch (Exception e) {
 			throw new IllegalArgumentException(
 					"The command 'print' should be of form 'print [text]'. Or the second argument is missing, or the second argument is not an valid String.");
@@ -46,6 +46,16 @@ public class PrintCommand extends ICommand{
 	@Override
 	public String getDecompiledPrefix() {
 		return "print ";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Prints out everything that is behind it. "
+				+ "For example, 'print hoi', will print h, o, i to the console."
+				+ "The compiler will throw an error if the argument is missing!"
+				+ "This is a funciton that has no compiled version. "
+				+ "Like 'print cc' will be compiled as 'push 99; out.char;push 99; out.char'. "
+				+ "This is just a function to make coding simpler.";
 	}
 	
 }

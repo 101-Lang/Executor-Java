@@ -36,5 +36,11 @@ public class DuplicateCommand extends ICommand {
 	public String getDecompiledPrefix() {
 		return getName();
 	}
+
+	@Override
+	public String getDescription() {
+		return "Duplicates the last value on the stack."
+				+ "For example if the stack is [1,2,3] and you do a duplicate command, the stack will look like [1,2,3,3]";
+	}
 	
 }
