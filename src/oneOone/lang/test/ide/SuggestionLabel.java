@@ -17,7 +17,7 @@ public class SuggestionLabel extends JLabel {
 	
 	private boolean focused = false;
 	
-	private final AutoSuggestor parent;
+	private final CodeTextPane parent;
 	
 	private Color suggestionsTextColor, suggestionBorderColor;
 	
@@ -31,7 +31,7 @@ public class SuggestionLabel extends JLabel {
 		}
 	};
 	
-	public SuggestionLabel(String txt, AutoSuggestor parent) {
+	public SuggestionLabel(String txt, CodeTextPane parent) {
 		super(txt);
 		
 		this.suggestionsTextColor = parent.suggestionsTextColor;
@@ -66,7 +66,8 @@ public class SuggestionLabel extends JLabel {
 	}
 	
 	private void replaceWithSuggestedText() {
-		String txt = parent.textField.getText();
+		parent.codeIsChaningText = true;
+		String txt = parent.getText();
 		String before = "", after = "";
 		
 		try{
@@ -76,10 +77,8 @@ public class SuggestionLabel extends JLabel {
 		try{
 			after = txt.substring(parent.getWordEnd(), txt.length()-1);
 		}catch(Exception e){}
-		parent.listen = false;
-		parent.textField.setText(before + getText() + after);
-		parent.listen = true;
-		System.out.println("new text after setting: " + parent.textField.getText());
+		parent.setText(before + getText() + after);
 		parent.removeDropdownMenu();
+		parent.codeIsChaningText = false;
 	}
 }

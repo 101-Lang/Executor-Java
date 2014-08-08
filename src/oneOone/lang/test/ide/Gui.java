@@ -1,7 +1,6 @@
 package oneOone.lang.test.ide;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -13,13 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextPane;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
 
 import oneOone.lang.Compiler;
 import oneOone.lang.Decompiler;
@@ -33,48 +27,19 @@ public class Gui extends JFrame {
 	private static final long serialVersionUID = 1L;
 	
 	public Gui thiss = this;
-	private AutoSuggestor autoSuggestor;
 	
-	private JTextPane codeArea;
+	private CodeTextPane codeArea;
 	private JTextArea compiledArea;
-	private JTextArea lineNrHeader;
+	public JTextArea lineNrHeader;
 	private JTextArea consoleArea;
 	
 	private JCheckBox chckbxShowStack;
-	
-	SimpleAttributeSet red = new SimpleAttributeSet();
-	SimpleAttributeSet black = new SimpleAttributeSet();
-	
-	
-	
-	public boolean isCompiled = true;
-	public long lastChange = 0;
-	
-	Thread liveCompiler = new Thread(new Runnable() {
-		
-		@Override
-		public void run() {
-			while(true){
-				if(System.currentTimeMillis() - lastChange > 100 && isCompiled == false){
-					compile(false);
-					isCompiled = true;
-				}
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	});
-	
 	
 	public Gui() {
 		Common.init();
 		setTitle("101-Script IDE");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		StyleConstants.setForeground(red, Color.RED);
-		StyleConstants.setForeground(black, Color.BLACK);
+
 		
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setResizeWeight(0.5);
@@ -94,46 +59,13 @@ public class Gui extends JFrame {
 		lineNrHeader.setText("1  ");
 		scrollPane.setRowHeaderView(lineNrHeader);
 		
-		codeArea = new JTextPane();
+		codeArea = new CodeTextPane(this);
 		scrollPane.setViewportView(codeArea);
-		//autoSuggestor = new AutoSuggestor(codeArea, this);
 		
 		JSplitPane splitPane_1 = new JSplitPane();
 		splitPane_1.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		splitPane_1.setResizeWeight(0.5);
 		splitPane.setRightComponent(splitPane_1);
-		
-
-		codeArea.getDocument().addDocumentListener(new DocumentListener() {
-			
-			public String getText() {
-				
-				StringBuffer text = new StringBuffer("1  " + System.lineSeparator());
-				int lines = codeArea.getText().split("\\r?\\n", -1).length;
-				for (int i = 2; i <= lines; i++) {
-					text.append(i + "  " + System.getProperty("line.separator"));
-				}
-				lastChange = System.currentTimeMillis();
-				isCompiled = false;
-				return text.toString();
-			}
-			
-			@Override
-			public void changedUpdate(DocumentEvent de) {
-				lineNrHeader.setText(getText());
-			}
-			
-			@Override
-			public void insertUpdate(DocumentEvent de) {
-				lineNrHeader.setText(getText());
-			}
-			
-			@Override
-			public void removeUpdate(DocumentEvent de) {
-				lineNrHeader.setText(getText());
-			}
-			
-		});
 		
 		JPanel compiledPanel = new JPanel();
 		compiledPanel.setBorder(new TitledBorder(null, "Compiled Code", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -166,7 +98,13 @@ public class Gui extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				compiledArea.setText(compile(true));
+				String in = codeArea.getText();
+				Compiler comp = new Compiler();
+				try {
+					compiledArea.setText(comp.compile(in));
+				} catch (CompileException e1) {
+					JOptionPane.showMessageDialog(thiss, "An error happend at line " + e1.getLineNumber() + ". Message: " + e1.getMessage());
+				}
 			}
 		});
 		
@@ -195,44 +133,7 @@ public class Gui extends JFrame {
 		
 		chckbxShowStack = new JCheckBox("show stack");
 		panel.add(chckbxShowStack);
-		lastChange = System.currentTimeMillis();
-		liveCompiler.start();
-	}
-	
-	public String compile(boolean showErrorDialog){
-
-		int errLineNumber = -1;
-		String in = codeArea.getText();
-		Compiler comp = new Compiler();
-		String out = null;
-		try {
-			out = comp.compile(in);
-		} catch (CompileException e1) {
-			errLineNumber = e1.getLineNumber();
-			if(showErrorDialog)
-				JOptionPane.showMessageDialog(thiss, "An error happend at line " + e1.getLineNumber() + ". Message: " + e1.getMessage());
-		}
-		int cur = codeArea.getCaretPosition();
-
-//		autoSuggestor.listen = false;
-		codeArea.setText("");
-		try{
-			String[] lines = in.split("\\r?\\n");
-			for(int i = 0; i < lines.length; i++){
-				if(i+1 == errLineNumber){
-					codeArea.getDocument().insertString(codeArea.getDocument().getLength(), lines[i] + "\n", red);
-				}else{
-					codeArea.getDocument().insertString(codeArea.getDocument().getLength(), lines[i] + "\n", black);
-				}
-
-			}
-		}catch(Exception e2){
-			e2.printStackTrace();
-		}
-//		autoSuggestor.listen = true;
-		codeArea.setCaretPosition(cur);
 		
-		return out;
 	}
 	
 	public static void main(String[] args) {
